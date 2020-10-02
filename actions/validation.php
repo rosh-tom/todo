@@ -13,6 +13,15 @@
             $_SESSION['temp'] = $data;
             header("location: login.php");
         }
+    }elseif($uri_segments[2] == 'account.php'){
+        if(!isset($_SESSION['isLoggedin'])){
+            $data = [
+                'err_message' => 'Please log in first'
+            ];
+            $_SESSION['temp'] = $data;
+            header("location: login.php");
+        }
+
     }elseif(
         $uri_segments[2] == 'login.php' or 
         $uri_segments[2] == 'index.php' or 

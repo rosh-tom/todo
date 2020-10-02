@@ -13,7 +13,7 @@
             <a href="login.php" class="btn btn-lg btn-primary btn-block">Login</a>
         </div>
     <?php 
-        }elseif($uri_segments[2] == 'home.php'){ 
+        }elseif($uri_segments[2] == 'home.php' or $uri_segments[2] == 'account.php'){ 
     ?>
         <div class="nav nav-pills pull-right">  
             <a href="actions/logout.php" class="btn btn-danger btn-sm">Log Out</a>  

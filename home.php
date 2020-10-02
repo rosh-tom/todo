@@ -4,17 +4,28 @@
     <?php include('inc/nav.php'); ?> 
 
     <div id="todo" v-cloak>
+        <?php 
+            require_once('database/connection.php');
+            $sqlQuery = "select * from tbl_users where id = ". $_SESSION['id'];
+            $result = $conn->query($sqlQuery);
+            $row = $result->fetch_assoc(); 
+        
+        ?>
          
-        <center><h3><a href="">Tomas Cadenas</a></h3></center>
+        <center><h3><a href="account.php"><?= $row['firstname']." ". $row['lastname'] ?></a></h3></center>
+
+
+
         <div class="form-home" action="actions/signin.php" method="post">
             <div class="row" style="margin-bottom: 20px;"> 
                     <div class="col-lg-12">
                         <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Add new TODO" v-model="txt_todo" v-on:keyup.enter="addTodo">
-                        <span class="input-group-btn">
-                            <button class="btn btn-success" type="button" v-on:click="addTodo" >ADD</button>
-                        </span>
+                            <input type="text" class="form-control" placeholder="Add new TODO" v-model="txt_todo" v-on:keyup.enter="addTodo">
+                            <span class="input-group-btn">
+                                <button class="btn btn-success" type="button" v-on:click="addTodo" >ADD</button>
+                            </span>
                         </div><!-- /input-group -->
+                        <span class="error text-danger" style="padding-left: 3px">{{ err_message }}</span>
                     </div><!-- /.col-lg-6 -->
             </div><!-- /.row -->            
         </div>
@@ -52,11 +63,11 @@
                             <h4 class="modal-title">Edit Todo</h4>
                             </div>
                             <div class="modal-body">
-                                <input type="text" class="form-control" v-model="txt_editTodo">
+                                <input type="text" class="form-control" v-model="txt_editTodo"  v-on:keyup.enter="updateTodo">
                                 <input type="hidden" class="form-control" v-model="txt_editID">
                             </div>
                             <div class="modal-footer">
-                            <button type="button" class="btn btn-success" v-on:click="updateTodo">Update</button>
+                            <button type="button" class="btn btn-success"v-on:click="updateTodo" >Update</button>
                             </div>
                         </div>
                     </div>
@@ -83,20 +94,23 @@
                 allData: '',
                 txt_editTodo: '',
                 txt_editID: '',
-                edit_modal: false
+                edit_modal: false,
+                err_message: ''
             },
             methods: {
                 addTodo: function(){
                     if(this.txt_todo != ''){
                         axios.post('actions/todo.php', {
                             action: 'insert',
-                            txtTodo: app.txt_todo
+                            txtTodo: app.txt_todo,
+                            txt_todo: ''
                         }).then(function(response){
+                            app.err_message = response.data.message;
                             app.txt_todo = '';
                             app.fetchAllData();
                         });
                     }else{
-                        alert("Cant add empty fields. ");
+                        app.err_message = "Cant add empty fields.";
                     }
                 },
 
@@ -132,6 +146,7 @@
                             id: app.txt_editID,
                             todo: app.txt_editTodo
                          }).then(function(response){ 
+                            alert(response.data.message);
                             app.fetchAllData();
                             app.edit_modal = false;
                             app.txt_editID = '';
@@ -148,6 +163,7 @@
             }, 
             created: function(){
                 this.fetchAllData();
+                this.err_message= '';
             }
         });
 
