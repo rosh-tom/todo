@@ -3,16 +3,16 @@
 <div class="container">  
     <?php include('inc/nav.php'); ?> 
 
-    <div id="todo">
+    <div id="todo" v-cloak>
          
         <center><h3><a href="">Tomas Cadenas</a></h3></center>
         <div class="form-home" action="actions/signin.php" method="post">
             <div class="row" style="margin-bottom: 20px;"> 
                     <div class="col-lg-12">
                         <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Add new TODO" v-model="txt_todo">
+                        <input type="text" class="form-control" placeholder="Add new TODO" v-model="txt_todo" v-on:keyup.enter="addTodo">
                         <span class="input-group-btn">
-                            <button class="btn btn-success" type="button" v-on:click="addTodo">ADD</button>
+                            <button class="btn btn-success" type="button" v-on:click="addTodo" >ADD</button>
                         </span>
                         </div><!-- /input-group -->
                     </div><!-- /.col-lg-6 -->
@@ -30,16 +30,13 @@
                             </span>
                             <p href="#" class="list-group-item">{{ row.todo }}</p> 
                             <span class="input-group-btn">
-                                <button class="btn btn-success" style="padding-top: 9px; padding-bottom: 9px;" type="button" v-on:click="doneTodo(row.id)">Done</button>
+                                <button class="btn btn-success" style="padding-top: 9px; padding-bottom: 9px;" type="button" v-on:keyup.enter="doneTodo(row.id)" v-on:click="doneTodo(row.id)">Done</button>
                             </span>
                         </div> 
 
                         <div class="input-group col-sm-12" v-if="row.todo == 'Empty'"> 
                             <p href="#" class="list-group-item">{{ row.todo }}</p>  
-                        </div> 
-
-
-
+                        </div>   
                     </div> 
                 </div>
             </div> 
