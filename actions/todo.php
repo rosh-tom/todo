@@ -13,28 +13,27 @@
                 $row = $result->fetch_assoc();
                 if($row['status'] == '1'){
                     $data = array(
-                        'message' => 'Already done! You can delete the done and add it again. '
+                        'err_message' => 'Already done! You can delete the done and add it again. '
                     );
                 }else{
                     $data = array(
-                        'message' => 'Already Exist!. '
-                    );
-                } 
+                        'err_message' => 'Already Exist!. '
+                    ); 
+                }  
                 echo json_encode($data); 
             }else{
                 $sqlQuery = "insert into tbl_todos (user_id, todo) values (". $_SESSION['id'] .", '". $todo ."')";
 
                 if($conn->query($sqlQuery) === true){
                     $data = array(
-                        'success' => 'success'
+                        'err_message' => 'good'
                     );
                 }else{
                     $data = array(
-                        'message' => 'bad'
-                    );
-                }  
+                        'err_message' => 'bad'
+                    );  
+                }   
                 echo json_encode($data); 
-
             } 
                 
         }elseif($received_data->action == 'fetchAll'){

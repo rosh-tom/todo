@@ -3,6 +3,9 @@ body {
     padding-top: 20px;
     padding-bottom: 20px;
   }
+  .hoverMe:hover{
+    cursor: pointer !important;
+  }
   
   /* Everything but the jumbotron gets side spacing for mobile first views */
   .header,
@@ -197,4 +200,6 @@ a:hover{
     }
   }
 }
+
+
 

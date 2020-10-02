@@ -1,5 +1,3 @@
-
-
 <?php include('inc/header.php'); ?>
 <div class="container">
     <?php include('inc/nav.php') ?>

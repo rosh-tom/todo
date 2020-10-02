@@ -12,7 +12,7 @@
         
         ?>
          
-        <center><h3><a href="account.php"><?= $row['firstname']." ". $row['lastname'] ?></a></h3></center>
+        <center><h3><a href="account.php" class="text-success" ><?= $row['firstname']." ". $row['lastname'] ?></a></h3></center>
 
 
 
@@ -25,7 +25,13 @@
                                 <button class="btn btn-success" type="button" v-on:click="addTodo" >ADD</button>
                             </span>
                         </div><!-- /input-group -->
-                        <span class="error text-danger" style="padding-left: 3px">{{ err_message }}</span>
+                        <!-- <span class="error text-danger" style="padding-left: 3px"></span> -->
+                        <div 
+                            v-if="err_message != ''"
+                            class='alert alert-danger' 
+                            style="padding: 5px; margin-top: 8px;" 
+                            >{{ err_message }}
+                        </div>
                     </div><!-- /.col-lg-6 -->
             </div><!-- /.row -->            
         </div>
@@ -46,7 +52,7 @@
                         </div> 
 
                         <div class="input-group col-sm-12" v-if="row.todo == 'Empty'"> 
-                            <p href="#" class="list-group-item">{{ row.todo }}</p>  
+                            <center><p href="#" class="list-group-item">{{ row.todo }}</p> </center> 
                         </div>   
                     </div> 
                 </div>
@@ -73,15 +79,14 @@
                     </div>
                 </div>
             </div>
-        </div> 
-              
+        </div>  
 
 
+    </div> 
+    <!-- app    --> 
 
-
-
-
-     </div>   <!-- app -->
+</div> 
+<!-- container   -->
 
         <!-- development version, includes helpful console warnings -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -105,7 +110,11 @@
                             txtTodo: app.txt_todo,
                             txt_todo: ''
                         }).then(function(response){
-                            app.err_message = response.data.message;
+                            if(response.data.err_message != 'good'){
+                                app.err_message = response.data.err_message; 
+                            }else{ 
+                                app.err_message= '';
+                            }
                             app.txt_todo = '';
                             app.fetchAllData();
                         });
@@ -167,7 +176,6 @@
             }
         });
 
-    </script>
-</div>  
+    </script> 
 <?php include('inc/footer.php'); ?>
  

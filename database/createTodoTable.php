@@ -7,8 +7,8 @@
         user_id int(6) not null,
         todo varchar(255) not null, 
         status varchar(2) not null default '0',
-        created_at timestamp default current_timestamp,
-        updated_at timestamp default current_timestamp on update current_timestamp
+        created_at timestamp default now(),
+        updated_at timestamp default now() on update now()
     )";
 
     if($conn->query($sqlQuery)){
