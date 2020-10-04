@@ -9,7 +9,4 @@
     <link rel="stylesheet" href="assets/narrow.css"> 
     <link rel="shortcut icon" href="uploads/icon.ico" type="image/x-icon">
     
-    <title>TODO</title>
-</head>
-<body>
-   
+ 

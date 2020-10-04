@@ -1,5 +1,9 @@
-  
-<?php include('inc/header.php'); ?> 
+        <?php include('inc/header.php'); ?>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <title>TODO</title>
+    </head>
+<body> 
 <div class="container">  
     <?php include('inc/nav.php'); ?> 
 
@@ -87,10 +91,7 @@
 
 </div> 
 <!-- container   -->
-
-        <!-- development version, includes helpful console warnings -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+ 
     <script>
         var app = new Vue({
             el: '#todo',

@@ -1,4 +1,9 @@
-<?php include('inc/header.php'); ?>
+        <?php include('inc/header.php'); ?> 
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <title>TODO</title>
+    </head>
+<body> 
 <div class="container">  
     <?php include('inc/nav.php'); ?> 
     <?php 
@@ -19,26 +24,20 @@
             <div class="col-sm-12"> 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Account Information 
+                        Account Information  
                         <button 
                             class="btn btn-default btn-sm pull-right" 
-                            style="margin-top: -5px;"
-                            v-on:click="func_editAccount"
-                            >Edit
-                        </button>
-                        <button 
-                            class="btn btn-default btn-sm pull-right" 
-                            style="margin-top: -5px; margin-right: 10px;" 
+                            style="margin-top: -5px;" 
                             v-on:click="changeMyPass"
                             > Change Password
                         </button>
                     </div>
                     <div class="panel-body"> 
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <label for="">First Name</label>
                             <input type="text" class="form-control" disabled value="<?= $row['firstname'] ?>" />
                         </div>     
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <label for="">Last Name</label>
                             <input type="text" class="form-control" disabled value="<?= $row['lastname'] ?>" />
                         </div>                
@@ -46,10 +45,21 @@
                             <label for="">Email</label>
                             <input type="text" class="form-control" disabled value="<?= $row['email'] ?>" />
                         </div>  
+                        <div class="col-sm-2">  
+                            <button 
+                                class="btn btn-primary"  
+                                v-on:click="changeMyPass"
+                                style="width: 100%; margin-top: 25px"
+                                > Edit
+                            </button>
+                        </div> 
                     </div>
                 </div>  
             </div>
         </div>
+         
+ 
+   
 
         <div class="row">
             <div class="col-sm-12"> 
@@ -59,7 +69,7 @@
                     </div>
                     <div class="panel-body"> 
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover" style="margin-bottom: 0px;">
                                 <thead>
                                     <tr>
                                         <th>Added</th>
@@ -69,20 +79,48 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="row in allMyTodo"> 
+                                    <tr v-for="row in allMyTodo" v-cloak> 
                                         <td v-if="row.todo == 'Empty'" colspan="4" ><center>{{ row.todo }}</center></td> 
                                         <td v-if="row.todo != 'Empty'" >{{ row.created_at }}</td> 
                                         <td v-if="row.todo != 'Empty'" >{{ row.updated_at }}</td> 
                                         <td v-if="row.todo != 'Empty'" >{{ row.todo }}</td> 
                                         <td v-if="row.todo != 'Empty'" ><a class="text-danger hoverMe" v-on:click="deleteMyTodo(row.id)"> <b> &times; </b>  </a></td>  
-                                    </tr> 
-                                </tbody>
-                            </table>
+                                    </tr>  
+                                </tbody> 
+                            </table>  
                         </div>
+                    </div>
+                    <div class="panel-footer">
+                    <center>
+                    <ul class="pagination">
+                        <li class="disabled"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+
+                        <li v-for = "n in numberOfPages"
+                            class="page-item"  
+                        >
+                            <a  
+                                class="page-link" v-on:click="fetchMyTodo(n)" >{{ n }}
+                            </a>
+                            <!-- 
+                                v-if="(page == n)"
+                                disabled 
+                                
+                                <a 
+                                v-else="(page != n)"
+                                class="page-link hoverMe" v-on:click="fetchMyTodo(n)">{{ n }}
+                            </a> -->
+                             
+                        </li>
+                         
+
+                        <li class=""><a href="#" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>
+                    </ul>
+                    </center> 
                     </div>
                 </div>  
             </div>
         </div> 
+        
 
         <div v-if="changePassword">
             <div class="modal-mask">
@@ -183,28 +221,32 @@
         </div>  
 
 
-
     </div>
     <!-- #account  -->
 </div>  
 <!-- .container  -->
-
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
     var app = new Vue({
         el: '#account',
         data: {
             allMyTodo : '',
             changePassword: false,
-            editAccount: false
+            editAccount: false,
+            page: 1,
+            numPage: 10,
+            numberOfPages: ''
         },
         methods: {
-            fetchMyTodo: function(){
+            fetchMyTodo: function(page){
                 axios.post('actions/account.php', {
-                    action: 'myTodos'
-                }).then(function(response){
-                    app.allMyTodo = response.data;
+                    action: 'myTodos', 
+                    myPage: page,  
+                    numPage: this.numPage
+                }).then(function(response){  
+                    app.allMyTodo = response.data.data;  
+                    app.numberOfPages = response.data.numberOfPages;  
+                    app.page = response.data.page;
+                    console.log(response.data.id);
                 }); 
             },
             deleteMyTodo: function(id){ 
@@ -213,12 +255,11 @@
                         action: 'deleteTodo',
                         id: id
                         }).then(function(response){
-                            app.fetchMyTodo();
+                            console.log(app.page);
+                            app.fetchMyTodo(app.page);
                         }
                     );
-                } else {           
-                   alert('Thing was not saved to the database.');
-                }
+                }  
                
             },
             changeMyPass: function(){
@@ -226,10 +267,17 @@
             },
             func_editAccount: function(){
                 app.editAccount = true;
-            }
-        },
+            },
+            // alertMe: function(){ 
+            //     page = new URL(location.href).searchParams.get('page');
+            //     if(!page){
+            //         page = 1;
+            //     }  
+            //     alert(page);
+            // }
+        }, 
         created: function(){ 
-            this.fetchMyTodo();
+            this.fetchMyTodo(this.page);
         }
 
     });

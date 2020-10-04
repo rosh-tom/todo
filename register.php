@@ -1,6 +1,7 @@
- 
-<?php include('inc/header.php'); ?>
- 
+        <?php include('inc/header.php'); ?>
+        <title>TODO</title>
+    </head>
+<body> 
 <div class="container">  
     <?php include('inc/nav.php') ?>
 
