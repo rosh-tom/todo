@@ -93,7 +93,8 @@
                     <div class="panel-footer">
                     <center>
                     <ul class="pagination">
-                        <li class="disabled"><a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li v-if="page!=1">
+                        <a aria-label="Previous" v-on:click="fetchMyTodo((page)-1)"><span aria-hidden="true">&laquo;</span></a></li>
 
                         <li v-for = "n in numberOfPages"
                             class="page-item"  
@@ -113,7 +114,9 @@
                         </li>
                          
 
-                        <li class=""><a href="#" aria-label="Previous"><span aria-hidden="true">&raquo;</span></a></li>
+                        <li v-if="page<numberOfPages">
+                        <a href="#" v-on:click="fetchMyTodo((page)+1)"><span aria-hidden="true">&raquo;</span></a>
+                        </li>
                     </ul>
                     </center> 
                     </div>
